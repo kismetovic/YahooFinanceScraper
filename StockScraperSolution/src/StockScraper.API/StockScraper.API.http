@@ -1,0 +1,6 @@
+@StockScraper.API_HostAddress = http://localhost:5282
+
+GET {{StockScraper.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
