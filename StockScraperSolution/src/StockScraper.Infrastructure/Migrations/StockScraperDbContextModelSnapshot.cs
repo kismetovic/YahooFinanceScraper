@@ -84,12 +84,6 @@ namespace StockScraper.Infrastructure.Migrations
                             b1.Property<Guid>("StockInfoId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Currency")
-                                .IsRequired()
-                                .HasMaxLength(10)
-                                .HasColumnType("nvarchar(10)")
-                                .HasColumnName("MarketCapCurrency");
-
                             b1.Property<decimal>("Value")
                                 .HasColumnType("decimal(18,2)")
                                 .HasColumnName("MarketCapValue");

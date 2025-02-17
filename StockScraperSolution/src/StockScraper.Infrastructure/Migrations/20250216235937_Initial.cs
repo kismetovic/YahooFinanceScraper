@@ -19,7 +19,6 @@ namespace StockScraper.Infrastructure.Migrations
                     Ticker = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     CompanyName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     MarketCapValue = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    MarketCapCurrency = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
                     YearFounded = table.Column<int>(type: "int", nullable: false),
                     NumberOfEmployees = table.Column<int>(type: "int", nullable: false),
                     HeadquartersCity = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),

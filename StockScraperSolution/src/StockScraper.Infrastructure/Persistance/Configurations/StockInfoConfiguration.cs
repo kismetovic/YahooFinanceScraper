@@ -28,7 +28,6 @@ namespace StockScraper.Infrastructure.Persistance.Configurations
             builder.OwnsOne(s => s.MarketCap, mc =>
             {
                 mc.Property(m => m.Value).HasColumnName("MarketCapValue").IsRequired();
-                mc.Property(m => m.Currency).HasColumnName("MarketCapCurrency").IsRequired().HasMaxLength(10);
             });
 
             builder.Property(s => s.YearFounded).IsRequired();

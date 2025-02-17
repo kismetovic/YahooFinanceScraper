@@ -19,7 +19,7 @@ namespace StockScraper.API.Common.Mappings
                 .Map(dest => dest.CompanyName, src => src.CompanyName)
                 .Map(dest => dest.PreviousClosePrice, src => src.Price!.PreviousClose)
                 .Map(dest => dest.OpenPrice, src => src.Price!.Open)
-                .Map(dest => dest.MarketCap, src => $"{src.MarketCap!.Value} {src.MarketCap.Currency}")
+                .Map(dest => dest.MarketCap, src => src.MarketCap!.Value)
                 .Map(dest => dest.YearFounded, src => src.YearFounded)
                 .Map(dest => dest.NumberOfEmployees, src => src.NumberOfEmployees)
                 .Map(dest => dest.HeadquartersCity, src => src.Headquarters!.City)

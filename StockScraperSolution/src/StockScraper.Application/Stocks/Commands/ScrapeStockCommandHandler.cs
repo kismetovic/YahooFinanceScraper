@@ -22,29 +22,12 @@ namespace StockScraper.Application.Stocks.Commands
         }
 
         public async Task<StockInfo> Handle(ScrapeStockCommand request, CancellationToken cancellationToken)
-        {
-            var existingStock = await _stocksRepository.GetByTickerAsync(request.Tickers.FirstOrDefault()!, request.Date);
-
-            if (existingStock is not null)
-                return existingStock;
-
+        { 
             var stockData = await _scraperService.ScrapeStockDataAsync(request.Tickers.FirstOrDefault()!, request.Date);
 
-            var stock = new StockInfo(
-                Guid.NewGuid(),
-                request.Tickers.FirstOrDefault(),
-                stockData.CompanyName!,
-                stockData.MarketCap!,
-                stockData.YearFounded,
-                stockData.NumberOfEmployees,
-                stockData.Headquarters!,
-                stockData.Price!,
-                request.Date
-            );
+            await _stocksRepository.AddAsync(stockData);
 
-            await _stocksRepository.AddAsync(stock);
-
-            return stock;
+            return stockData;
         }
     }
 }

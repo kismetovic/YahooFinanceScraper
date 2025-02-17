@@ -12,7 +12,7 @@ using StockScraper.Infrastructure.Persistance;
 namespace StockScraper.Infrastructure.Migrations
 {
     [DbContext(typeof(StockScraperDbContext))]
-    [Migration("20250214225304_Initial")]
+    [Migration("20250216235937_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -86,12 +86,6 @@ namespace StockScraper.Infrastructure.Migrations
                         {
                             b1.Property<Guid>("StockInfoId")
                                 .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Currency")
-                                .IsRequired()
-                                .HasMaxLength(10)
-                                .HasColumnType("nvarchar(10)")
-                                .HasColumnName("MarketCapCurrency");
 
                             b1.Property<decimal>("Value")
                                 .HasColumnType("decimal(18,2)")
