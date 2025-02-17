@@ -11,8 +11,8 @@ namespace StockScraper.Application.Stocks.Commands
     {
         public ScrapeStockCommandValidator()
         {
-            RuleFor(x => x.Tickers.FirstOrDefault())
-                .NotEmpty().WithMessage("Ticker is required")
+            RuleFor(x => x.Ticker)
+                .NotNull().WithMessage("Ticker is required")
                 .Length(1, 10).WithMessage("Ticker must be between 1 and 10 characters.");
 
             RuleFor(x => x.Date)

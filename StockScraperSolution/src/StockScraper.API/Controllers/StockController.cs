@@ -25,7 +25,7 @@ namespace StockScraper.API.Controllers
             var command = _mapper.Map<ScrapeStockCommand>(request);
 
             var scrapeStockResult = await _mediator.Send(command);
-            return Ok(scrapeStockResult);
+            return Ok(new StockResponse(scrapeStockResult.Id, scrapeStockResult.Ticker!, scrapeStockResult.CompanyName!, scrapeStockResult.Price!.PreviousClose, scrapeStockResult.Price.Open, scrapeStockResult.MarketCap!.Value, scrapeStockResult.MarketCap.Currency, scrapeStockResult.YearFounded, scrapeStockResult.NumberOfEmployees, scrapeStockResult.Headquarters!.City, scrapeStockResult.Headquarters!.State, scrapeStockResult.DateRetrieved, scrapeStockResult.DateScraped));
         }
 
         [HttpPut("/update")]

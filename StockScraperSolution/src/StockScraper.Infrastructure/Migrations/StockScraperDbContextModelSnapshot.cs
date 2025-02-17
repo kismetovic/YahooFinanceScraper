@@ -36,6 +36,9 @@ namespace StockScraper.Infrastructure.Migrations
                     b.Property<DateTime>("DateRetrieved")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateScraped")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("NumberOfEmployees")
                         .HasColumnType("int");
 
@@ -83,6 +86,12 @@ namespace StockScraper.Infrastructure.Migrations
                         {
                             b1.Property<Guid>("StockInfoId")
                                 .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Currency")
+                                .IsRequired()
+                                .HasMaxLength(10)
+                                .HasColumnType("nvarchar(10)")
+                                .HasColumnName("MarketCapCurrency");
 
                             b1.Property<decimal>("Value")
                                 .HasColumnType("decimal(18,2)")

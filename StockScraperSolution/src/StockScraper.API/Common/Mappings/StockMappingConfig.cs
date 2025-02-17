@@ -11,7 +11,7 @@ namespace StockScraper.API.Common.Mappings
         {
             config.NewConfig<ScrapeStocksRequest, ScrapeStockCommand>()
                 .Map(dest => dest.Date, src => src.dateTime)
-                .Map(dest => dest.Tickers, src => src.Tickers);
+                .Map(dest => dest.Ticker, src => src.Ticker);
 
             config.NewConfig<StockInfo, StockResponse>()
                 .Map(dest => dest.Id, src => src.Id)
@@ -20,11 +20,13 @@ namespace StockScraper.API.Common.Mappings
                 .Map(dest => dest.PreviousClosePrice, src => src.Price!.PreviousClose)
                 .Map(dest => dest.OpenPrice, src => src.Price!.Open)
                 .Map(dest => dest.MarketCap, src => src.MarketCap!.Value)
+                .Map(dest => dest.MarketCapCurrency, src => src.MarketCap!.Currency)
                 .Map(dest => dest.YearFounded, src => src.YearFounded)
                 .Map(dest => dest.NumberOfEmployees, src => src.NumberOfEmployees)
                 .Map(dest => dest.HeadquartersCity, src => src.Headquarters!.City)
                 .Map(dest => dest.HeadquartersState, src => src.Headquarters!.State)
-                .Map(dest => dest.DateRetrieved, src => src.DateRetrieved);
+                .Map(dest => dest.DateRetrieved, src => src.DateRetrieved)
+                .Map(dest => dest.DateScraped, src => src.DateScraped);
 
         }
     }

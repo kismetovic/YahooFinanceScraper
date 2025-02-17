@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace StockScraper.Application.Stocks.Commands
 {
-    public sealed record ScrapeStockCommand(List<string> Tickers, DateTime Date) : IRequest<StockInfo>;
+    public sealed record ScrapeStockCommand(string Ticker, DateTime Date) : IRequest<StockInfo>;
 }

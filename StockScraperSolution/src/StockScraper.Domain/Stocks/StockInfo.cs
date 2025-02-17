@@ -18,10 +18,11 @@ namespace StockScraper.Domain.Stocks
         public Location? Headquarters { get; private set; }
         public StockPrice? Price { get; private set; }
         public DateTime DateRetrieved { get; private set; }
+        public DateTime DateScraped { get; private set; }
 
         private StockInfo() { }
 
-        public StockInfo(Guid id, string ticker, string companyName, MarketCap marketCap, int yearFounded, int numberOfEmployees, Location headquarters, StockPrice price, DateTime dateRetrieved)
+        public StockInfo(Guid id, string ticker, string companyName, MarketCap marketCap, int yearFounded, int numberOfEmployees, Location headquarters, StockPrice price, DateTime dateRetrieved, DateTime dateScraped)
             : base(id)
         {
             Ticker = ticker;
@@ -32,6 +33,7 @@ namespace StockScraper.Domain.Stocks
             Headquarters = headquarters;
             Price = price;
             DateRetrieved = dateRetrieved;
+            DateScraped = dateScraped;
         }
     }
 

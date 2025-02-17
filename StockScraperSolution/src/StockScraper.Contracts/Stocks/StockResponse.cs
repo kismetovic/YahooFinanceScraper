@@ -12,10 +12,12 @@ namespace StockScraper.Contracts.Stocks
         string CompanyName,
         decimal PreviousClosePrice,
         decimal OpenPrice,
-        string MarketCap,
+        decimal MarketCap,
+        string MarketCapCurrency,
         int YearFounded,
         int NumberOfEmployees,
         string HeadquartersCity,
         string HeadquartersState,
-        DateTime DateRetrieved);
+        DateTime DateRetrieved,
+        DateTime DateScraped);
 }

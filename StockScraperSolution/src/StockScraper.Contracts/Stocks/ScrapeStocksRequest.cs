@@ -8,5 +8,5 @@ namespace StockScraper.Contracts.Stocks
 {
     public record ScrapeStocksRequest(
         DateTime dateTime,
-        List<string> Tickers);
+        string Ticker);
 }
