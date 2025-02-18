@@ -9,7 +9,7 @@ namespace StockScraper.Application.Common.Interfaces.Persistance
 {
     public interface IStockRepository
     {
-        Task<StockInfo?> GetByTickerAsync(string ticker, DateTime date);
+        Task<IEnumerable<StockInfo>> GetAllAsync();
         Task AddAsync(StockInfo stock);
     }
 }

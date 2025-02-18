@@ -1,7 +1,9 @@
-﻿using MapsterMapper;
+﻿using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using StockScraper.Application.Stocks.Commands;
+using StockScraper.Application.Stocks.Queries;
 using StockScraper.Contracts.Stocks;
 
 namespace StockScraper.API.Controllers
@@ -25,19 +27,22 @@ namespace StockScraper.API.Controllers
             var command = _mapper.Map<ScrapeStockCommand>(request);
 
             var scrapeStockResult = await _mediator.Send(command);
-            return Ok(new StockResponse(scrapeStockResult.Id, scrapeStockResult.Ticker!, scrapeStockResult.CompanyName!, scrapeStockResult.Price!.PreviousClose, scrapeStockResult.Price.Open, scrapeStockResult.MarketCap!.Value, scrapeStockResult.MarketCap.Currency, scrapeStockResult.YearFounded, scrapeStockResult.NumberOfEmployees, scrapeStockResult.Headquarters!.City, scrapeStockResult.Headquarters!.State, scrapeStockResult.DateRetrieved, scrapeStockResult.DateScraped));
-        }
 
-        [HttpPut("/update")]
-        public async Task<IActionResult> UpdateStock()
-        {
-            return Ok();
+            var result = _mapper.Map<StockResponse>(scrapeStockResult);
+
+            return Ok(result);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetStocks()
         {
-            return Ok();
+            var query = new GetAllStocksQuery();
+
+            var getAllResult = await _mediator.Send(query);
+
+            var result = getAllResult.Select(si => _mapper.Map<StockResponse>(si));
+
+            return Ok(result);
         }
     }
 }

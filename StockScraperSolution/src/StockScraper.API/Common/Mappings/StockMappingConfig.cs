@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using StockScraper.Application.Stocks.Commands;
+using StockScraper.Application.Stocks.Queries;
 using StockScraper.Contracts.Stocks;
 using StockScraper.Domain.Stocks;
 
@@ -27,6 +28,9 @@ namespace StockScraper.API.Common.Mappings
                 .Map(dest => dest.HeadquartersState, src => src.Headquarters!.State)
                 .Map(dest => dest.DateRetrieved, src => src.DateRetrieved)
                 .Map(dest => dest.DateScraped, src => src.DateScraped);
+
+
+            config.NewConfig<IEnumerable<StockInfo>, GetAllStocksResponse>();
 
         }
     }

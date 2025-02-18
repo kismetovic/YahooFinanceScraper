@@ -1,0 +1,97 @@
+﻿@page "/history"
+
+@rendermode InteractiveServer
+
+@using StockScraper.Contracts.Stocks
+@using System.Net.Http.Json
+
+@inject HttpClient Http
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h3>Stock Scraping History</h3>
+
+        @if (IsLoading)
+        {
+            <p>Loading stock history...</p>
+        }
+        else if (Results == null || !Results.Any())
+        {
+            <p>No stock data available.</p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Ticker</th>
+                        <th>Company Name</th>
+                        <th>Previous Close Price</th>
+                        <th>Open Price</th>
+                        <th>Market Cap</th>
+                        <th>Year Founded</th>
+                        <th>Employees</th>
+                        <th>Headquarters</th>
+                        <th>Date Retrieved</th>
+                        <th>Date Scraped</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var stock in Results)
+                    {
+                        <tr>
+                            <td>@stock.Ticker</td>
+                            <td>@stock.CompanyName</td>
+                            <td>@stock.PreviousClosePrice</td>
+                            <td>@stock.OpenPrice</td>
+                            <td>@($"{stock.MarketCap} {stock.MarketCapCurrency}")</td>
+                            <td>@stock.YearFounded</td>
+                            <td>@stock.NumberOfEmployees</td>
+                            <td>@($"{stock.HeadquartersCity}, {stock.HeadquartersState}")</td>
+                            <td>@stock.DateRetrieved</td>
+                            <td>@stock.DateScraped</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@code {
+    private IEnumerable<StockResponse>? Results;
+    private bool IsLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadStockDataAsync();
+    }
+
+    private async Task LoadStockDataAsync()
+    {
+        try
+        {
+            IsLoading = true;
+            var response = await Http.GetAsync("http://localhost:61200/Stock");
+
+            if (response.IsSuccessStatusCode)
+            {
+                Results = await response.Content.ReadFromJsonAsync<IEnumerable<StockResponse>>();
+            }
+            else
+            {
+                Console.WriteLine($"API Error: {response.StatusCode}");
+                Results = new List<StockResponse>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            Results = new List<StockResponse>();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+}

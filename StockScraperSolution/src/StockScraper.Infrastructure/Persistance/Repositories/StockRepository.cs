@@ -15,11 +15,9 @@ namespace StockScraper.Infrastructure.Persistance.Repositories
             _context = context;
         }
 
-        public async Task<StockInfo?> GetByTickerAsync(string ticker, DateTime date)
+        public async Task<IEnumerable<StockInfo>> GetAllAsync()
         {
-            return await _context.Stocks
-                .Where(s => s.Ticker == ticker && s.DateRetrieved.Date == date.Date)
-                .FirstOrDefaultAsync();
+            return await _context.Stocks.OrderByDescending(s => s.DateScraped).ToListAsync();
         }
 
         public async Task AddAsync(StockInfo stock)

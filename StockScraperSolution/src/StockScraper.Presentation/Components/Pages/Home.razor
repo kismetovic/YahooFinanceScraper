@@ -87,6 +87,7 @@
             {
                 var result = await response.Content.ReadFromJsonAsync<StockResponse>();
                 Results!.Add(result!);
+                StateHasChanged();
             }
         }
         IsLoading = false;
