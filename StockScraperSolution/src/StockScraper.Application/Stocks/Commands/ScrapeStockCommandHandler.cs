@@ -19,7 +19,7 @@ namespace StockScraper.Application.Stocks.Commands
         public async Task<StockInfo> Handle(ScrapeStockCommand request, CancellationToken cancellationToken)
         {
 
-            var stockData = await _scraperService.ScrapeStockDataAsync(request.Ticker, request.Date);
+            var stockData = _scraperService.ScrapeStockDataAsync(request.Ticker, request.Date);
 
             await _stocksRepository.AddAsync(stockData);
 

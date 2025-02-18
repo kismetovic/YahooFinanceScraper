@@ -72,7 +72,7 @@
         try
         {
             IsLoading = true;
-            var response = await Http.GetAsync("http://localhost:61200/Stock");
+            var response = await Http.GetAsync("/Stock");
 
             if (response.IsSuccessStatusCode)
             {

@@ -79,10 +79,9 @@
 
         IsLoading = true;
         var tickersList = Tickers.Split(',').Select(t => t.Trim()).ToList();
-        var response1 = await Http.GetAsync("https://localhost:44327/Stock");
         foreach(var ticker in tickersList) {
             var request = new ScrapeStocksRequest(SelectedDate, ticker);
-            var response = await Http.PostAsJsonAsync("http://localhost:61200/scrape", request);
+            var response = await Http.PostAsJsonAsync("/scrape", request);
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<StockResponse>();

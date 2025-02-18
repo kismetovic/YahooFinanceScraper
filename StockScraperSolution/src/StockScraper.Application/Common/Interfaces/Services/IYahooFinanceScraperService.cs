@@ -9,6 +9,6 @@ namespace StockScraper.Application.Common.Interfaces.Services
 {
     public interface IYahooFinanceScraperService
     {
-        Task<StockInfo> ScrapeStockDataAsync(string ticker, DateTime date);
+        StockInfo ScrapeStockDataAsync(string ticker, DateTime date);
     }
 }
