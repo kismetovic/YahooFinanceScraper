@@ -12,23 +12,20 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/StockScraper.API/StockScraper.API.csproj", "src/StockScraper.API/"]
-COPY ["src/StockScraper.Application/StockScraper.Application.csproj", "src/StockScraper.Application/"]
-COPY ["src/StockScraper.Domain/StockScraper.Domain.csproj", "src/StockScraper.Domain/"]
+COPY ["src/StockScraper.Presentation/StockScraper.Presentation.csproj", "src/StockScraper.Presentation/"]
 COPY ["src/StockScraper.Contracts/StockScraper.Contracts.csproj", "src/StockScraper.Contracts/"]
-COPY ["src/StockScraper.Infrastructure/StockScraper.Infrastructure.csproj", "src/StockScraper.Infrastructure/"]
-RUN dotnet restore "./src/StockScraper.API/StockScraper.API.csproj"
+RUN dotnet restore "./src/StockScraper.Presentation/StockScraper.Presentation.csproj"
 COPY . .
-WORKDIR "/src/src/StockScraper.API"
-RUN dotnet build "./StockScraper.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/src/StockScraper.Presentation"
+RUN dotnet build "./StockScraper.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./StockScraper.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./StockScraper.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "StockScraper.API.dll"]
+ENTRYPOINT ["dotnet", "StockScraper.Presentation.dll"]

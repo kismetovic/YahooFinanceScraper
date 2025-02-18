@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using StockScraper.Application.Stocks.Commands;
 using StockScraper.Application.Stocks.Queries;
 using StockScraper.Contracts.Stocks;
+using ErrorOr;
 
 namespace StockScraper.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class StockController : ControllerBase
+    public class StockController : ApiController
     {
         private readonly IMapper _mapper;
         private readonly ISender _mediator;
@@ -28,9 +29,10 @@ namespace StockScraper.API.Controllers
 
             var scrapeStockResult = await _mediator.Send(command);
 
-            var result = _mapper.Map<StockResponse>(scrapeStockResult);
 
-            return Ok(result);
+            return scrapeStockResult.Match(
+                stock => Ok(_mapper.Map<StockResponse>(scrapeStockResult)), 
+                errors => Problem(errors));
         }
 
         [HttpGet]

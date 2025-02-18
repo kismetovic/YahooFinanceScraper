@@ -4,26 +4,34 @@
 
 @using StockScraper.Contracts.Stocks
 @using System.Text.Json
+@using Microsoft.AspNetCore.Components.Forms
 
 @inject HttpClient Http
 
 <div class="card">
     <div class="card-body">
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="datePicker" class="form-label">Select Date</label>
-                <input type="date" id="datePicker" class="form-control" @bind="SelectedDate" />
+        <EditForm Model="this" OnValidSubmit="SubmitData">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="datePicker" class="form-label">Select Date</label>
+                    <InputDate id="datePicker" class="form-control" @bind-Value="SelectedDate" />
+                    <ValidationMessage For="@(() => SelectedDate)" />
+                </div>
+                <div class="col-md-6">
+                    <label for="tickersInput" class="form-label">Enter tickers (comma-separated)</label>
+                    <InputText id="tickersInput" class="form-control" @bind-Value="Tickers" />
+                    <ValidationMessage For="@(() => Tickers)" />
+                </div>
             </div>
-            <div class="col-md-6">
-                <label for="tickersInput" class="form-label">Enter tickers (comma-separated)</label>
-                <input type="text" id="tickersInput" class="form-control" @bind="Tickers"/>
-            </div>
-        </div>
-        <button class="btn btn-primary" @onclick="SubmitData" disabled="@IsLoading">@(IsLoading ? "Loading..." : "Submit")</button>
+            <button class="btn btn-primary" type="submit" disabled="@IsLoading">@(IsLoading ? "Loading..." : "Submit")</button>
+        </EditForm>
     </div>
 </div>
 
-@if (Results is not null)
+@if (Results is not null && Results.Any())
 {
     <div class="card mt-3">
         <div class="card-body">
@@ -64,31 +72,79 @@
     </div>
 }
 
+<!-- Error Modal -->
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="modal fade show" style="display: block;" aria-modal="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">Error</h5>
+                    <button type="button" class="btn-close" @onclick="CloseErrorModal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>@ErrorMessage</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CloseErrorModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
+
 @code {
     private DateTime SelectedDate { get; set; } = DateTime.UtcNow;
     private string? Tickers { get; set; }
     private List<StockResponse>? Results { get; set; } = new List<StockResponse>();
     private bool IsLoading { get; set; } = false;
+    private string? ErrorMessage { get; set; }
 
     private async Task SubmitData()
     {
         if (string.IsNullOrWhiteSpace(Tickers))
         {
+            ErrorMessage = "Tickers cannot be empty.";
+            return;
+        }
+
+        if (SelectedDate.Date.Equals(DateTime.UtcNow.Date))
+        {
+            ErrorMessage = "Date must be entered prior to today.";
             return;
         }
 
         IsLoading = true;
         var tickersList = Tickers.Split(',').Select(t => t.Trim()).ToList();
-        foreach(var ticker in tickersList) {
+
+        foreach (var ticker in tickersList)
+        {
             var request = new ScrapeStocksRequest(SelectedDate, ticker);
             var response = await Http.PostAsJsonAsync("/scrape", request);
+
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<StockResponse>();
-                Results!.Add(result!);
-                StateHasChanged();
+                if (result != null)
+                {
+                    Results!.Add(result);
+                }
+            }
+            else
+            {
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                ErrorMessage = $"Error retrieving data for {ticker}: {errorResponse}";
+                IsLoading = false;
+                return;
             }
         }
+
         IsLoading = false;
+    }
+
+    private void CloseErrorModal()
+    {
+        ErrorMessage = null;
     }
 }

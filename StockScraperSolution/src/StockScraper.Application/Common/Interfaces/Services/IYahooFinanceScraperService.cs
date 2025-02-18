@@ -1,4 +1,5 @@
-﻿using StockScraper.Domain.Stocks;
+﻿using ErrorOr;
+using StockScraper.Domain.Stocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace StockScraper.Application.Common.Interfaces.Services
 {
     public interface IYahooFinanceScraperService
     {
-        StockInfo ScrapeStockDataAsync(string ticker, DateTime date);
+        ErrorOr<StockInfo> ScrapeStockDataAsync(string ticker, DateTime date);
     }
 }

@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.DataProtection;
 using Scalar.AspNetCore;
 using StockScraper.API.Common.Mappings;
 using StockScraper.Application;
 using StockScraper.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDataProtection()
+            .DisableAutomaticKeyGeneration();
 
 // Add services to the container.
 builder.Services
