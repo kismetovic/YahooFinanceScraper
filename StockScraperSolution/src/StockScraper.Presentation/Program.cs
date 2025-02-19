@@ -9,6 +9,7 @@ builder.Services.AddDataProtection()
         // This helps surviving a site update: each app has its own store, building the site creates a new app
         .SetApplicationName("StockScraperPR")
         .SetDefaultKeyLifetime(TimeSpan.FromDays(90));
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

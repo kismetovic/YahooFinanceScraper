@@ -1,11 +1,9 @@
-﻿using Mapster;
-using MapsterMapper;
+﻿using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using StockScraper.Application.Stocks.Commands;
 using StockScraper.Application.Stocks.Queries;
 using StockScraper.Contracts.Stocks;
-using ErrorOr;
 
 namespace StockScraper.API.Controllers
 {
@@ -31,7 +29,7 @@ namespace StockScraper.API.Controllers
 
 
             return scrapeStockResult.Match(
-                stock => Ok(_mapper.Map<StockResponse>(scrapeStockResult.Value)), 
+                stock => Ok(_mapper.Map<StockResponse>(scrapeStockResult.Value)),
                 errors => Problem(errors));
         }
 

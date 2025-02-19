@@ -7,11 +7,6 @@ using StockScraper.Infrastructure.Common.Models;
 using StockScraper.Infrastructure.Persistance;
 using StockScraper.Infrastructure.Persistance.Repositories;
 using StockScraper.Infrastructure.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StockScraper.Infrastructure
 {

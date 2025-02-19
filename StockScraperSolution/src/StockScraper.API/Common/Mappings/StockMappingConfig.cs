@@ -1,6 +1,5 @@
 ﻿using Mapster;
 using StockScraper.Application.Stocks.Commands;
-using StockScraper.Application.Stocks.Queries;
 using StockScraper.Contracts.Stocks;
 using StockScraper.Domain.Stocks;
 
@@ -8,7 +7,7 @@ namespace StockScraper.API.Common.Mappings
 {
     public class StockMappingConfig : IRegister
     {
-        public void Register(TypeAdapterConfig config) 
+        public void Register(TypeAdapterConfig config)
         {
             config.NewConfig<ScrapeStocksRequest, ScrapeStockCommand>()
                 .Map(dest => dest.Date, src => src.dateTime)
