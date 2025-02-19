@@ -31,7 +31,7 @@ namespace StockScraper.API.Controllers
 
 
             return scrapeStockResult.Match(
-                stock => Ok(_mapper.Map<StockResponse>(scrapeStockResult)), 
+                stock => Ok(_mapper.Map<StockResponse>(scrapeStockResult.Value)), 
                 errors => Problem(errors));
         }
 

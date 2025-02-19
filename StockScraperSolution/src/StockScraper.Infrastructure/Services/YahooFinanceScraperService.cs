@@ -31,15 +31,15 @@ namespace StockScraper.Infrastructure.Services
             chromeDriverService.HideCommandPromptWindow = true;
 
             var options = new ChromeOptions();
-            options.AddArgument("--headless=new");
+            //options.AddArgument("--headless=new");
             options.AddArgument("--disable-gpu");
-            options.AddArgument("--no-sandbox");
+            //options.AddArgument("--no-sandbox");
             options.AddArgument("--disable-dev-shm-usage");
             options.AddArgument("--log-level=3");
             options.AddArgument("--disable-logging");
             options.AddArgument("--silent");
 
-            var remoteWebDriverUrl = Environment.GetEnvironmentVariable("SELENIUM_REMOTE_URL") ?? "http://selenium-hub:4444/wd/hub";
+            var remoteWebDriverUrl = Environment.GetEnvironmentVariable("SELENIUM_REMOTE_URL") ?? "http://localhost:4444/wd/hub";
 
             var driver = new RemoteWebDriver(new Uri(remoteWebDriverUrl), options);
 
