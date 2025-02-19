@@ -1,11 +1,12 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 using StockScraper.Application.Common.Interfaces.Persistance;
 using StockScraper.Application.Common.Interfaces.Services;
 using StockScraper.Domain.Stocks;
 
 namespace StockScraper.Application.Stocks.Commands
 {
-    public sealed class ScrapeStockCommandHandler : IRequestHandler<ScrapeStockCommand, StockInfo>
+    public sealed class ScrapeStockCommandHandler : IRequestHandler<ScrapeStockCommand, ErrorOr<StockInfo>>
     {
         private readonly IStockRepository _stocksRepository;
         private readonly IYahooFinanceScraperService _scraperService;
@@ -16,14 +17,17 @@ namespace StockScraper.Application.Stocks.Commands
             _scraperService = scraperService;
         }
 
-        public async Task<StockInfo> Handle(ScrapeStockCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<StockInfo>> Handle(ScrapeStockCommand request, CancellationToken cancellationToken)
         {
 
             var stockData = _scraperService.ScrapeStockDataAsync(request.Ticker, request.Date);
 
-            await _stocksRepository.AddAsync(stockData);
+            if (stockData.IsError)
+                return stockData.Errors;
 
-            return stockData;
+            await _stocksRepository.AddAsync(stockData.Value);
+
+            return stockData.Value;
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StockScraper.Contracts.Stocks
+﻿namespace StockScraper.Contracts.Stocks
 {
     public sealed record StockResponse(
         Guid Id,

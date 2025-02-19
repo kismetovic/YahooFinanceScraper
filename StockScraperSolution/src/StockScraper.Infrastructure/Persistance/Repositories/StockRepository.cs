@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StockScraper.Application.Common.Interfaces.Persistance;
 using StockScraper.Domain.Stocks;
-using StockScraper.Infrastructure.Persistance;
 
 namespace StockScraper.Infrastructure.Persistance.Repositories
 {

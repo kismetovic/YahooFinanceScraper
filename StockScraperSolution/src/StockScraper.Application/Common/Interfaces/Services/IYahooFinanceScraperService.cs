@@ -1,14 +1,10 @@
-﻿using StockScraper.Domain.Stocks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ErrorOr;
+using StockScraper.Domain.Stocks;
 
 namespace StockScraper.Application.Common.Interfaces.Services
 {
     public interface IYahooFinanceScraperService
     {
-        StockInfo ScrapeStockDataAsync(string ticker, DateTime date);
+        ErrorOr<StockInfo> ScrapeStockDataAsync(string ticker, DateTime date);
     }
 }

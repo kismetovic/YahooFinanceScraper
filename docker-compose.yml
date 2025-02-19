@@ -1,0 +1,87 @@
+version: "3.8"
+
+services:
+  selenium-hub:
+    image: selenium/hub:latest
+    container_name: selenium-hub
+    networks:
+      - app-network
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+
+  selenium-node-chrome:
+    image: selenium/node-chrome:latest
+    container_name: selenium-node-chrome
+    environment:
+      - SE_NODE_MAX_SESSION=1
+      - SE_NODE_MAX_INSTANCES=1
+      - HUB_HOST=selenium-hub
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_LOG_LEVEL=FINE
+    networks:
+      - app-network
+    depends_on:
+      - selenium-hub
+    ports:
+      - "5900:5900"
+
+  backend:
+    build:
+      context: ./StockScraperSolution
+      dockerfile: src/StockScraper.API/Dockerfile
+    ports:
+      - "5000:8080"
+      - "5002:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db,1433;Database=StockScraper;User Id=sa;Password=Administrator!;MultipleActiveResultSets=True;TrustServerCertificate=True;
+      - SELENIUM_REMOTE_URL=http://selenium-hub:4444/wd/hub
+    networks:
+      - app-network
+    depends_on:
+      - db
+      - selenium-hub
+    command: >
+      bash -c "dotnet ef database update && dotnet StockScraper.API.dll"
+    restart: always
+
+  frontend:
+    build:
+      context: ./StockScraperSolution
+      dockerfile: src/StockScraper.Presentation/Dockerfile
+    ports:
+      - "5001:8080"
+      - "5003:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__API=http://backend:8080/
+      - DetailedErrors=true
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "Administrator!"
+      ACCEPT_EULA: "Y"
+      MSSQL_DATABASE: "StockScraper"
+    ports:
+      - "1433:1433"
+    networks:
+      - app-network
+    volumes:
+      - db-data:/var/opt/mssql
+    restart: always
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
