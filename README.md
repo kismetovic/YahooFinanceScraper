@@ -96,12 +96,12 @@ This command will build the Docker images and start the containers for the appli
 
 
 src
-├── StockScraper.API
-├── StockScraper.Application
-├── StockScraper.Contracts
-├── StockScraper.Domain
-├── StockScraper.Infrastructure
-└── StockScraper.Presentation
+    StockScraper.API
+    StockScraper.Application
+    StockScraper.Contracts
+    StockScraper.Domain
+    StockScraper.Infrastructure
+    StockScraper.Presentation
 tests
 
 ## Conclusion
